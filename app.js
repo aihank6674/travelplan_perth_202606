@@ -8,7 +8,7 @@ let activeFilter = 'all';
 const uiTranslations = {
     zh: {
         title: "2026 珀斯 & 西澳珊瑚海岸 - 深度家庭探索",
-        headerTitle: "西澳亲子自驾 (最终确认版)",
+        headerTitle: "西澳亲子自驾",
         headerSub: "2026年6月11日 - 6月23日 | 2大2小",
         btnLang: "English",
         filterAll: "全部",
@@ -36,7 +36,7 @@ const uiTranslations = {
     },
     en: {
         title: "2026 Perth & WA Coral Coast - Family Exploration",
-        headerTitle: "WA Family Road Trip (Final Version)",
+        headerTitle: "WA Family Road Trip",
         headerSub: "11 Jun - 23 Jun 2026 | 2 Adults & 2 Kids",
         btnLang: "简体中文",
         filterAll: "All",

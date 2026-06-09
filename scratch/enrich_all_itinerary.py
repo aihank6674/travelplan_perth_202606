@@ -1,5 +1,10 @@
-const itineraryDataZh = [
-    { 
+# -*- coding: utf-8 -*-
+import os
+
+def main():
+    dest_path = "itineraryData.js"
+
+    days_zh = """    { 
         id: 0, 
         date: "6月11日", 
         fullDate: "6月11日 (周四)", 
@@ -260,11 +265,9 @@ const itineraryDataZh = [
         activities: [
             {time:"06:30", title:"抵达新加坡樟宜机场", icon:"fa-home", note:"【欢迎回家】班机于清晨 06:30 降落在新加坡樟宜机场。如果时间充裕，可以顺道去 Jewel (星耀樟宜) 拍摄壮丽的 <b>Rain Vortex (室内雨漩涡瀑布)</b>。40米高的水流从穹顶倾泻而下，在晨光下云雾缭绕，为这段完美的西澳之旅画上圆满的句号。"}
         ] 
-    }
-];
+    }"""
 
-const itineraryDataEn = [
-    { 
+    days_en = """    { 
         id: 0, 
         date: "Jun 11", 
         fullDate: "Jun 11 (Thu)", 
@@ -525,5 +528,22 @@ const itineraryDataEn = [
         activities: [
             {time:"06:30", title:"Arrive at Changi Airport", icon:"fa-home", note:"【Welcome Home】Land at Changi Airport at 06:30 AM. If you have energy, walk over to **Jewel Changi** to admire the spectacular 40-meter **Rain Vortex**, the world's tallest indoor waterfall, steaming under the morning sunlight—a perfect end to an unforgettable journey."}
         ] 
-    }
+    }"""
+
+    # Assemble the final contents
+    final_contents = f"""const itineraryDataZh = [
+{days_zh}
 ];
+
+const itineraryDataEn = [
+{days_en}
+];
+"""
+
+    print("Reconstruction of itineraryData.js started...")
+    with open(dest_path, "w", encoding="utf-8") as f:
+        f.write(final_contents)
+    print("Success! itineraryData.js reconstructed completely with enriched data.")
+
+if __name__ == "__main__":
+    main()
