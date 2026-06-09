@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 珀斯 & 西澳珊瑚海岸 - 深度家庭探索 (最终确认版)</title>
+    <title>2026 珀斯 & 西澳珊瑚海岸 - 深度家庭探索</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
@@ -18,40 +18,17 @@
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
             <div>
                 <h1 class="text-lg md:text-2xl font-bold text-stone-800 flex items-center gap-2">
-                    <i class="fa-solid fa-earth-oceania text-orange-500"></i> 西澳亲子自驾 (最终确认版)
+                    <i class="fa-solid fa-earth-oceania text-orange-500"></i> <span id="header-title">西澳亲子自驾 (最终确认版)</span>
                 </h1>
-                <p class="text-xs text-stone-500">2026年6月11日 - 6月23日 | 2大2小</p>
+                <p class="text-xs text-stone-500" id="header-sub">2026年6月11日 - 6月23日 | 2大2小</p>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="generatePackingList()" class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full text-xs md:text-sm font-medium hover:shadow-lg transition">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span class="hidden md:inline">智能</span>打包
+                <button onclick="toggleLanguage()" id="btn-lang" class="flex items-center gap-2 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-full text-xs md:text-sm font-medium transition border border-stone-200 shadow-sm">
+                    <i class="fa-solid fa-language"></i> <span>English</span>
                 </button>
             </div>
         </div>
     </header>
-
-    <!-- Modal for Packing List -->
-    <div id="packing-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
-            <div class="p-4 border-b border-stone-100 flex justify-between items-center">
-                <h3 class="text-lg font-bold ai-gradient-text flex items-center gap-2">
-                    <i class="fa-solid fa-suitcase"></i> AI 智能打包助手
-                </h3>
-                <button onclick="closePackingModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <div class="p-6 overflow-y-auto flex-1 custom-scrollbar bg-stone-50">
-                <div id="packing-loading" class="hidden flex flex-col items-center justify-center py-10">
-                    <div class="typing-indicator text-2xl mb-4"><span></span><span></span><span></span></div>
-                    <p class="text-stone-500 text-sm">正在分析 6月珀斯天气与行程...</p>
-                </div>
-                <div id="packing-content" class="prose prose-stone prose-sm max-w-none">
-                    <!-- Content injected here -->
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Main Layout -->
     <main class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full relative">
@@ -62,9 +39,9 @@
             <!-- Filters -->
             <div class="p-4 sticky top-0 bg-white z-20 border-b border-stone-100 shadow-sm">
                 <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-                    <button onclick="filterDays('all')" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-800 text-white transition shadow-sm" data-filter="all">全部</button>
-                    <button onclick="filterDays('roadtrip')" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-filter="roadtrip">🚗 自驾段</button>
-                    <button onclick="filterDays('city')" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-filter="city">🏙️ 城市段</button>
+                    <button onclick="filterDays('all')" id="filter-all" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-800 text-white transition shadow-sm" data-filter="all">全部</button>
+                    <button onclick="filterDays('roadtrip')" id="filter-roadtrip" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-filter="roadtrip">🚗 自驾段</button>
+                    <button onclick="filterDays('city')" id="filter-city" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-filter="city">🏙️ 城市段</button>
                 </div>
             </div>
 
@@ -78,8 +55,8 @@
                             <i class="fa-solid fa-map"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-stone-800">行程总览 Overview</h3>
-                            <p class="text-xs text-stone-500">路线图 • 统计 • 亮点</p>
+                            <h3 class="text-sm font-bold text-stone-800" id="overview-title">行程总览 Overview</h3>
+                            <p class="text-xs text-stone-500" id="overview-sub">路线图 • 统计 • 亮点</p>
                         </div>
                      </div>
                 </div>
@@ -92,7 +69,7 @@
             
             <!-- Mobile Back Button Header -->
             <div class="md:hidden sticky top-0 bg-white/95 backdrop-blur border-b border-stone-200 p-3 z-30 flex items-center shadow-sm">
-                <button onclick="showSidebar()" class="flex items-center gap-2 text-sm font-bold text-stone-600 hover:text-orange-500 transition px-2 py-1 rounded-lg active:bg-stone-100">
+                <button onclick="showSidebar()" id="back-btn" class="flex items-center gap-2 text-sm font-bold text-stone-600 hover:text-orange-500 transition px-2 py-1 rounded-lg active:bg-stone-100">
                     <i class="fa-solid fa-chevron-left"></i> 返回行程表
                 </button>
             </div>
