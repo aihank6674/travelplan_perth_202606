@@ -24,6 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 .env
 
+
 # Local temporary scripts
-scratch/patch_*.py
-scratch/update_*.py
+scratch/
+docs/
