@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 珀斯 & 西澳珊瑚海岸 - 深度家庭探索 (最终确认版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #fdfbf7; color: #4a4a4a; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; height: 300px; max-height: 300px; }
+        .timeline-line { position: absolute; left: 24px; top: 0; bottom: 0; width: 2px; background-color: #e5e7eb; z-index: 0; }
+        .active-day { border-left: 4px solid #f97316; background-color: #fff7ed; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        
+        /* Mobile View Utils */
+        .mobile-hidden { display: none !important; }
+        @media (min-width: 768px) {
+            .mobile-hidden { display: block !important; }
+            .md-flex { display: flex !important; }
+        }
+
+        /* AI Feature Styles */
+        .ai-gradient-text {
+            background: linear-gradient(to right, #f97316, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .ai-card {
+            background: linear-gradient(135deg, #fffaf0 0%, #fff 100%);
+            border: 1px solid #fed7aa;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #f97316;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+            margin: 0 2px;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200 shadow-sm flex-none z-30">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+            <div>
+                <h1 class="text-lg md:text-2xl font-bold text-stone-800 flex items-center gap-2">
+                    <i class="fa-solid fa-earth-oceania text-orange-500"></i> 西澳亲子自驾 (最终确认版)
+                </h1>
+                <p class="text-xs text-stone-500">2026年6月11日 - 6月23日 | 2大2小</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="generatePackingList()" class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full text-xs md:text-sm font-medium hover:shadow-lg transition">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span class="hidden md:inline">智能</span>打包
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal for Packing List -->
+    <div id="packing-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+            <div class="p-4 border-b border-stone-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold ai-gradient-text flex items-center gap-2">
+                    <i class="fa-solid fa-suitcase"></i> AI 智能打包助手
+                </h3>
+                <button onclick="closePackingModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 custom-scrollbar bg-stone-50">
+                <div id="packing-loading" class="hidden flex flex-col items-center justify-center py-10">
+                    <div class="typing-indicator text-2xl mb-4"><span></span><span></span><span></span></div>
+                    <p class="text-stone-500 text-sm">正在分析 6月珀斯天气与行程...</p>
+                </div>
+                <div id="packing-content" class="prose prose-stone prose-sm max-w-none">
+                    <!-- Content injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <main class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full relative">
+        
+        <!-- Sidebar (Timeline) -->
+        <aside id="sidebar-panel" class="w-full md:w-1/3 lg:w-1/4 bg-white border-r border-stone-200 overflow-y-auto flex-none z-10 custom-scrollbar relative flex flex-col h-full">
+            
+            <!-- Filters -->
+            <div class="p-4 sticky top-0 bg-white z-20 border-b border-stone-100 shadow-sm">
+                <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                    <button onclick="filterDays('all')" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-800 text-white transition shadow-sm" data-filter="all">全部</button>
+                    <button onclick="filterDays('roadtrip')" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-filter="roadtrip">🚗 自驾段</button>
+                    <button onclick="filterDays('city')" class="filter-btn whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-filter="city">🏙️ 城市段</button>
+                </div>
+            </div>
+
+            <!-- List -->
+            <div id="timeline-list" class="pb-20 md:pb-10 relative flex-1">
+                <div class="timeline-line"></div>
+                <!-- Overview Item (Fixed at top) -->
+                <div onclick="selectOverview()" class="relative pl-4 pr-4 py-4 cursor-pointer hover:bg-orange-50 transition-colors border-b border-stone-100 bg-orange-50/50 group" id="overview-item">
+                     <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-map"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-stone-800">行程总览 Overview</h3>
+                            <p class="text-xs text-stone-500">路线图 • 统计 • 亮点</p>
+                        </div>
+                     </div>
+                </div>
+                <!-- Dynamic Items -->
+            </div>
+        </aside>
+
+        <!-- Main Detail View -->
+        <section id="detail-panel" class="absolute inset-0 md:static w-full md:flex-1 bg-stone-50 overflow-y-auto custom-scrollbar z-20 mobile-hidden transform transition-transform duration-300">
+            
+            <!-- Mobile Back Button Header -->
+            <div class="md:hidden sticky top-0 bg-white/95 backdrop-blur border-b border-stone-200 p-3 z-30 flex items-center shadow-sm">
+                <button onclick="showSidebar()" class="flex items-center gap-2 text-sm font-bold text-stone-600 hover:text-orange-500 transition px-2 py-1 rounded-lg active:bg-stone-100">
+                    <i class="fa-solid fa-chevron-left"></i> 返回行程表
+                </button>
+            </div>
+
+            <!-- Content Container -->
+            <div id="day-content" class="max-w-4xl mx-auto p-4 md:p-8 fade-in pb-20">
+                <!-- Content loaded via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- Gemini API Setup ---
+        const apiKey = ""; // Environment API Key
+        
+        async function callGemini(prompt) {
+            if (!apiKey) {
+                return new Promise(resolve => setTimeout(() => resolve("由于未设置API Key，此处显示模拟内容：\n\n1. **推荐美食**：试试当地的炸鱼薯条。\n2. **隐藏景点**：旁边有个安静的小海湾。\n3. **冷知识**：这里曾经是潜艇基地。"), 1000));
+            }
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                if (!response.ok) throw new Error("API Error");
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (e) {
+                console.error(e);
+                return "抱歉，AI 暂时无法连接。请稍后再试。";
+            }
+        }
+
+        // --- Updated Itinerary Data with Hotel & Google Docs Info ---
+        const itineraryData = [
+            { 
+                id: 0, 
+                date: "6月11日", 
+                fullDate: "6月11日 (周四)", 
+                title: "抵达珀斯 - 舒适调整", 
+                location: "Perth", 
+                type: "city", 
+                stay: "Novotel Perth Murray Street", 
+                driving: "机场接送约30分钟", 
+                tags: ["精致早餐", "酒店泳池", "牛排晚餐"], 
+                desc: "抵达珀斯，入住市中心位置极佳的Novotel。首日以调整状态和享受美食为主。", 
+                activities: [
+                    {time:"06:00", title:"抵达珀斯国际机场 (PER)", icon:"fa-plane-arrival", note:"通关后打车前往市区 (Uber XL)。"},
+                    {time:"09:00", title:"早餐: Petition Kitchen", icon:"fa-mug-hot", note:"【专家推荐】位于 State Buildings，享用精致西式早餐，环境优雅轻松。"},
+                    {time:"11:00", title:"伊丽莎白码头", icon:"fa-water", note:"打卡 Spanda 雕塑，孩子们可以玩威尼斯旋转木马 (Carousel)。"},
+                    {time:"14:00", title:"办理入住 & 休息放松", icon:"fa-hotel", note:"入住 Novotel Perth Murray Street。下午可以去12楼的恒温泳池放松，为后续行程储备体力。"},
+                    {time:"18:00", title:"晚餐: Meat & Wine Co", icon:"fa-utensils", note:"【需预订】位于古建筑内的高品质牛排馆，肋排非常适合孩子。"}
+                ]
+            },
+            { 
+                id: 1, 
+                date: "6月12日", 
+                fullDate: "6月12日 (周五)", 
+                title: "城市漫步 - 英伦风情与国王公园", 
+                location: "Perth City", 
+                type: "city", 
+                stay: "Novotel Perth Murray Street", 
+                driving: "市区步行", 
+                mapImage: "perth_route_map.png",
+                tags: ["英伦都铎风", "大自鸣钟", "伊丽莎白码头", "漫步天鹅河", "Jacobs Ladder"], 
+                desc: "从Novotel Perth Murray Street出发，沿着市中心主干道，漫步英伦都铎风情的伦敦巷，直奔地标伊丽莎白码头，沿着绝美的天鹅河畔西行，最终挑战 Jacobs Ladder 攀登至国王公园俯瞰城市全景。", 
+                activities: [
+                    {time:"08:30", title:"酒店享用丰盛早餐", icon:"fa-mug-hot", note:"在 Novotel Perth Murray Street 享用丰盛美味的早餐，为今天的城市徒步漫游储备能量。该酒店地理位置极佳，出行很方便，房间和服务也非常赞。"},
+                    {time:"09:30", title:"第一站：London Court (伦敦巷)", icon:"fa-dungeon", note:"从酒店出发只需步行几步。这里满屏都是英伦范儿的都铎风格建筑，仿佛穿越回伦敦。拍照极其出片，记得抬头欣赏精致的大自鸣钟 🕰️！走出伦敦巷即是步行街（今天因公共假期多数商店未开门，但非常适合清静地漫步拍照）。"},
+                    {time:"11:00", title:"第二站：Elizabeth Quay (伊丽莎白港)", icon:"fa-water", note:"沿着小路向南前行，直奔珀斯地标伊丽莎白港。标志性的“大圆环”双弧桥是必去打卡点。在桥上吹着天鹅河的微风，看着渡轮在河面穿梭，感受西澳特有的松弛感 🌊。"},
+                    {time:"12:00", title:"午餐推荐: 码头景观餐厅", icon:"fa-utensils", note:"推荐在伊丽莎白码头边的 The Reveley 享用午餐，看着海景吃美食，稍作休整。"},
+                    {time:"13:30", title:"第三站：Swan River Side Walk (漫步天鹅河)", icon:"fa-person-walking-dashed-line", note:"顺着河边步道一直向西走。这一段路虽然有点长，但河景绝美！沿途设有许多木质座椅，非常适合拍出氛围感大片。如果运气好，还可以看到优雅的黑天鹅在岸边踱步 🦢。"},
+                    {time:"15:30", title:"第四站：Kings Park (爬坡 Jacobs Ladder)", icon:"fa-mountain", note:"走到高架桥下方，通过环岛过马路到对面，定位到 Jacobs Ladder。顺着山坡拾级而上，沿途可以欣赏到美丽的壁画。之后顺着路牌指引一直走到 Kings Park。虽然爬完楼梯腿有些酸，但看到俯瞰整个珀斯 City 的无敌 View 时，一切都值了！这里傍晚的落日与城市灯火更漂亮 🌿。"}
+                ] 
+            },
+            { 
+                id: 2, 
+                date: "6月13日", 
+                fullDate: "6月13日 (周六)", 
+                title: "自驾启程 - 沙丘与尖峰", 
+                location: "Jurien Bay", 
+                type: "roadtrip", 
+                stay: "Jurien Bay Tourist Park", 
+                driving: "约2.5小时 (220km)", 
+                tags: ["滑沙", "龙虾午餐", "外星地貌"], 
+                desc: "提取租车，开启印度洋公路之旅。今天的重点是动感的滑沙和震撼的石阵。", 
+                route: [{from:"Perth", to:"Lancelin", time:"1.5h"}, {from:"Lancelin", to:"Cervantes", time:"55m"}, {from:"Cervantes", to:"Jurien Bay", time:"25m"}], 
+                activities: [
+                    {time:"09:00", title:"取车出发", icon:"fa-car", note:"建议租用大型SUV。出发前往兰斯林。"},
+                    {time:"10:30", title:"兰斯林沙丘 (Lancelin)", icon:"fa-wind", note:"租滑沙板，在洁白的沙山上体验速度与激情 (约1小时)。"},
+                    {time:"12:30", title:"午餐: 龙虾工厂", icon:"fa-shrimp", note:"【Lobster Shack】必停站！品尝半只烤龙虾配薯条，看着渔船吃午餐。"},
+                    {time:"14:30", title:"尖峰石阵 (The Pinnacles)", icon:"fa-monument", note:"开车进入环形车道 (Loop Drive)，随停随拍，像火星一样的地貌。"},
+                    {time:"17:00", title:"入住朱里恩湾", icon:"fa-bed", note:"入住 Jurien Bay Tourist Park，海边散步。"}
+                ] 
+            },
+            { 
+                id: 3, 
+                date: "6月14日", 
+                fullDate: "6月14日 (周日)", 
+                title: "粉红梦境 - 前往卡尔巴里", 
+                location: "Kalbarri", 
+                type: "roadtrip", 
+                stay: "Kalbarri Murchison View Hotel", 
+                driving: "约3.5小时 (300km)", 
+                tags: ["粉红湖", "怪树", "银鸥纪念碑"], 
+                desc: "一路向北，打卡怪树，在正午阳光最好的时候抵达粉红湖。", 
+                route: [{from:"Jurien Bay", to:"Geraldton", time:"2.5h"}, {from:"Geraldton", to:"Hutt Lagoon", time:"1h"}, {from:"Hutt Lagoon", to:"Kalbarri", time:"45m"}], 
+                activities: [
+                    {time:"09:00", title:"Greenough 怪树", icon:"fa-tree", note:"路过停车拍照，树干被风吹得贴地生长 (Leaning Trees)。"},
+                    {time:"10:30", title:"杰拉尔顿纪念碑", icon:"fa-landmark", note:"参观 HMAS Sydney II 纪念碑 (银色海鸥圆顶)，视野极佳，非枯燥历史景点。"},
+                    {time:"13:30", title:"粉红湖 (Hutt Lagoon)", icon:"fa-palette", note:"【高光时刻】正午时分粉色最浓！沿着岸边走走，绝佳拍照点。"},
+                    {time:"16:00", title:"入住卡尔巴里", icon:"fa-hotel", note:"入住 Murchison View Hotel。"},
+                    {time:"17:30", title:"晚餐: Finlay's Kalbarri", icon:"fa-fish", note:"【特色推荐】露天餐厅，红土地面，提供自酿啤酒和海鲜，氛围极佳。"}
+                ] 
+            },
+            { 
+                id: 4, 
+                date: "6月15日", 
+                fullDate: "6月15日 (周一)", 
+                title: "卡尔巴里 - 峡谷与小船", 
+                location: "Kalbarri", 
+                type: "roadtrip", 
+                stay: "Kalbarri Murchison View Hotel", 
+                driving: "约1小时 (国家公园往返)", 
+                tags: ["自然之窗", "天空步道", "开小船"], 
+                desc: "深入国家公园看红土峡谷，下午悠闲地在河上开船 (无需驾照)。", 
+                activities: [
+                    {time:"09:00", title:"自然之窗 (Nature's Window)", icon:"fa-camera-retro", note:"透过岩石框看默奇森河，往返1公里步行，稍有攀爬乐趣。"},
+                    {time:"11:00", title:"天空步道 (Skywalk)", icon:"fa-bridge", note:"悬臂观景台，悬空100米，设有咖啡亭可以休息。"},
+                    {time:"13:00", title:"午餐: Kalbarri Bakery", icon:"fa-bread-slice", note:"买好肉派，去 Chinaman's Beach 边看鹈鹕边野餐。"},
+                    {time:"14:30", title:"河上巡游 (Hire a Tinny)", icon:"fa-ship", note:"【亲子推荐】在河边租艘小船，全家开船找黑天鹅，孩子的最爱。"},
+                    {time:"17:00", title:"海岸悬崖日落", icon:"fa-water", note:"去 Red Bluff 或 Island Rock 看壮丽的悬崖日落。"}
+                ] 
+            },
+            { 
+                id: 5, 
+                date: "6月16日", 
+                fullDate: "6月16日 (周二)", 
+                title: "北上鲨鱼湾 - 世界遗产", 
+                location: "Monkey Mia", 
+                type: "roadtrip", 
+                stay: "RAC Monkey Mia Dolphin Resort", 
+                driving: "约4.5小时 (400km)", 
+                tags: ["贝壳海滩", "老鹰崖", "海景房"], 
+                desc: "穿过荒原，抵达独特的世界自然遗产区。注意路途较长，准备好车载娱乐。", 
+                route: [{from:"Kalbarri", to:"Overlander", time:"2h50m"}, {from:"Overlander", to:"Monkey Mia", time:"1h40m"}], 
+                activities: [
+                    {time:"09:00", title:"出发北上", icon:"fa-road", note:"途中在 Billabong Roadhouse 休息加油。"},
+                    {time:"13:00", title:"贝壳海滩 (Shell Beach)", icon:"fa-gem", note:"由亿万个微小贝壳组成的海滩，白色海滩与绿松石海水对比强烈。"},
+                    {time:"14:30", title:"鹰崖 (Eagle Bluff)", icon:"fa-binoculars", note:"走在悬崖栈道上，俯瞰浅海里的鲨鱼和鳐鱼。"},
+                    {time:"16:30", title:"抵达度假村", icon:"fa-umbrella-beach", note:"入住 RAC Monkey Mia。出门就是沙滩，常有鸸鹋在度假村散步。"},
+                    {time:"18:00", title:"晚餐: The Boughshed", icon:"fa-utensils", note:"度假村内餐厅，方便舒适。"}
+                ] 
+            },
+            { 
+                id: 6, 
+                date: "6月17日", 
+                fullDate: "6月17日 (周三)", 
+                title: "海豚与海洋生物全接触", 
+                location: "Monkey Mia", 
+                type: "roadtrip", 
+                stay: "RAC Monkey Mia Dolphin Resort", 
+                driving: "周边短途", 
+                tags: ["喂海豚", "找海牛", "喂鲨鱼"], 
+                desc: "全天与海洋生物互动。早起看海豚，出海找海牛，再去水族馆看喂鲨鱼。", 
+                activities: [
+                    {time:"07:45", title:"海豚体验 (Dolphin Experience)", icon:"fa-fish", note:"必做！野生海豚游到脚边，机会亲手喂食 (听从护林员安排)。"},
+                    {time:"10:00", title:"双体船巡游", icon:"fa-sailboat", note:"【Aristocat 2】出海寻找海牛 (Dugong)、海龟和鲨鱼。"},
+                    {time:"13:00", title:"午餐: Shark Bay Hotel", icon:"fa-burger", note:"驱车去 Denham 镇，在拥有无敌海景的酒吧吃午餐。"},
+                    {time:"14:30", title:"海洋公园 (Ocean Park)", icon:"fa-skull-crossbones", note:"【硬核体验】看生猛的鲨鱼喂食，近距离观察海蛇和石头鱼。"},
+                    {time:"17:00", title:"日落休闲", icon:"fa-glass-water", note:"在度假村打迷你高尔夫或海滩漫步。"}
+                ] 
+            },
+            { 
+                id: 7, 
+                date: "6月18日", 
+                fullDate: "6月18日 (周四)", 
+                title: "折返杰拉尔顿", 
+                location: "Geraldton", 
+                type: "roadtrip", 
+                stay: "African Reef Resort", 
+                driving: "约4.5小时 (430km)", 
+                tags: ["返程", "游乐场", "精酿啤酒"], 
+                desc: "开始南下返程，在杰拉尔顿停留一晚，享受城市便利。", 
+                activities: [
+                    {time:"09:00", title:"告别海豚，出发", icon:"fa-car", note:"再次途径 Shell Beach 可补拍照片。"},
+                    {time:"12:00", title:"中途休息: Billabong", icon:"fa-gas-pump", note:"补充能量。"},
+                    {time:"15:00", title:"入住 African Reef", icon:"fa-city", note:"入住 African Reef Resort (海边)。"},
+                    {time:"16:00", title:"Foreshore Playground", icon:"fa-child-reaching", note:"带孩子去海滨超大游乐场放电 (水上乐园/攀爬网)。"},
+                    {time:"18:00", title:"晚餐: Cutler & Smith", icon:"fa-utensils", note:"氛围极佳的精酿餐厅，食物精致 (如软壳蟹)，家庭友好。"}
+                ] 
+            },
+            { 
+                id: 8, 
+                date: "6月19日", 
+                fullDate: "6月19日 (周五)", 
+                title: "回到珀斯 - 咖啡与海景", 
+                location: "Perth", 
+                type: "roadtrip", 
+                stay: "Holiday Inn Perth City Centre By IHG", 
+                driving: "约4.5小时 (420km)", 
+                tags: ["董加拉", "栈桥午餐", "还车"], 
+                desc: "完成最后的自驾路段，途径美丽的董加拉和朱里恩湾。", 
+                route: [{from:"Geraldton", to:"Dongara", time:"45m"}, {from:"Dongara", to:"Jurien Bay", time:"1h10m"}, {from:"Jurien Bay", to:"Perth", time:"2.5h"}], 
+                activities: [
+                    {time:"09:30", title:"咖啡: Poppies by the Park", icon:"fa-coffee", note:"【董加拉】温馨的公园旁咖啡馆，环境优美，适合休息。"},
+                    {time:"12:00", title:"午餐: Jurien Bay Jetty", icon:"fa-umbrella-beach", note:"在栈桥旁的 Cafe 用餐，最后看一眼绿松石海岸。"},
+                    {time:"16:00", title:"抵达珀斯 & 还车", icon:"fa-key", note:"市区还车，入住 Holiday Inn Perth City Centre。"},
+                    {time:"18:00", title:"晚餐", icon:"fa-bowl-food", note:"在市中心简单用餐，休息。"}
+                ] 
+            },
+            { 
+                id: 9, 
+                date: "6月20日", 
+                fullDate: "6月20日 (周六)", 
+                title: "珀斯都市慢生活", 
+                location: "Perth City", 
+                type: "city", 
+                stay: "Holiday Inn Perth City Centre By IHG", 
+                driving: "无", 
+                tags: ["Brunch", "购物", "热巧克力"], 
+                desc: "没有车的一天，睡到自然醒，享受城市的购物和美食。", 
+                activities: [
+                    {time:"10:00", title:"悠闲 Brunch", icon:"fa-mug-hot", note:"推荐 Arrival Hall 或 Hylin。"},
+                    {time:"12:00", title:"购物时光", icon:"fa-bag-shopping", note:"逛逛 Murray St Mall 或坐黄猫巴士去 Watertown Brand Outlet。"},
+                    {time:"15:00", title:"Koko Black 下午茶", icon:"fa-cake-candles", note:"尝试 Hot Chocolate Flight (热巧克力品鉴盘)，一次喝到多种口味。"},
+                    {time:"18:00", title:"晚餐: Long Chim", icon:"fa-pepper-hot", note:"【State Buildings】米其林大厨的泰餐，或选择 Ribs & Burgers。"}
+                ] 
+            },
+            { 
+                id: 10, 
+                date: "6月21日", 
+                fullDate: "6月21日 (周日)", 
+                title: "双城记：罗特尼斯 & 弗里曼特尔", 
+                location: "Rottnest / Fremantle", 
+                type: "city", 
+                stay: "Holiday Inn Perth City Centre By IHG", 
+                driving: "渡轮/火车", 
+                tags: ["环岛巴士", "集市", "炸鱼薯条"], 
+                desc: "寻找微笑袋鼠，下午逛弗里曼特尔周末集市。", 
+                activities: [
+                    {time:"07:30", title:"渡轮出发 (Barrack St)", icon:"fa-ship", note:"顺便欣赏天鹅河两岸豪宅。预订 Multi-port 船票 (Perth出, Freo回)。"},
+                    {time:"09:00", title:"罗特尼斯岛 (Rottnest)", icon:"fa-camera", note:"推荐坐 Island Explorer Bus 环岛 (比骑车省力)，寻找 Quokka 合影。"},
+                    {time:"14:30", title:"前往弗里曼特尔", icon:"fa-anchor", note:"乘船前往 Fremantle (B-Shed)。"},
+                    {time:"15:30", title:"弗里曼特尔集市", icon:"fa-store", note:"周末集市非常热闹，有蜂蜜蛋糕、街头表演和手工艺品。"},
+                    {time:"17:30", title:"晚餐: Kailis Fish Market", icon:"fa-fish", note:"【推荐】海鲜拼盘和炸鱼薯条比 Cicerello's 更精致，坐在港口边享用。"},
+                    {time:"19:30", title:"返回珀斯", icon:"fa-train", note:"坐火车 (30分钟) 或 Uber 返回市区。"}
+                ] 
+            },
+            { 
+                id: 11, 
+                date: "6月22日", 
+                fullDate: "6月22日 (周一)", 
+                title: "最后的告别", 
+                location: "Perth Airport", 
+                type: "city", 
+                stay: "飞机上", 
+                driving: "前往机场", 
+                tags: ["屋顶酒吧", "返程"], 
+                desc: "享受珀斯的最后时光，傍晚前往机场。", 
+                activities: [
+                    {time:"11:00", title:"最后的休闲", icon:"fa-martini-glass", note:"去 Elizabeth Quay 的 The Reveley 屋顶酒吧喝杯饮料，看看风景。"},
+                    {time:"14:00", title:"自由活动/电影", icon:"fa-film", note:"在 Raine Square 看场电影或做最后采购。"},
+                    {time:"20:30", title:"前往机场 (PER)", icon:"fa-taxi", note:"前往 T1 航站楼。"},
+                    {time:"01:00", title:"航班起飞", icon:"fa-plane-departure", note:"次日凌晨航班 (6月23日)。"}
+                ] 
+            },
+            { 
+                id: 12, 
+                date: "6月23日", 
+                fullDate: "6月23日 (周二)", 
+                title: "抵达新加坡", 
+                location: "Singapore", 
+                type: "home", 
+                stay: "温暖的家", 
+                driving: "-", 
+                tags: ["回家"], 
+                desc: "旅程结束，带回满满的回忆。", 
+                activities: [{time:"06:30", title:"抵达樟宜机场", icon:"fa-home", note:"欢迎回家！"}] 
+            }
+        ];
+
+        // --- State Management ---
+        let currentDayId = -1; // -1 represents Overview
+        let activeFilter = 'all';
+
+        // --- Logic: Layout Control (Mobile) ---
+        function showSidebar() {
+            document.getElementById('sidebar-panel').classList.remove('mobile-hidden');
+            document.getElementById('detail-panel').classList.add('mobile-hidden');
+        }
+
+        function showDetail() {
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar-panel').classList.add('mobile-hidden');
+                document.getElementById('detail-panel').classList.remove('mobile-hidden');
+            }
+        }
+
+        // --- Logic: Render Timeline ---
+        function renderTimeline() {
+            const listEl = document.getElementById('timeline-list');
+            // Remove all days (keep line and overview)
+            const days = listEl.querySelectorAll('.day-item');
+            days.forEach(d => d.remove());
+
+            itineraryData.forEach((day, index) => {
+                if (activeFilter !== 'all' && day.type !== activeFilter && day.type !== 'home') return;
+
+                const item = document.createElement('div');
+                item.className = `day-item relative pl-10 pr-4 py-4 cursor-pointer hover:bg-stone-50 transition-colors border-b border-stone-100 ${index === currentDayId ? 'active-day' : ''}`;
+                item.onclick = () => selectDay(index);
+
+                let iconClass = 'fa-city text-blue-500';
+                if (day.type === 'roadtrip') iconClass = 'fa-car text-orange-500';
+                if (day.type === 'home') iconClass = 'fa-plane text-stone-400';
+
+                item.innerHTML = `
+                    <div class="absolute left-4 top-5 w-4 h-4 bg-white border-2 ${index === currentDayId ? 'border-orange-500 scale-125' : 'border-stone-300'} rounded-full z-10"></div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-stone-400 uppercase tracking-wide">${day.date}</span>
+                        <h3 class="text-sm font-bold text-stone-800">${day.title}</h3>
+                        <div class="flex items-center gap-2 mt-1">
+                            <i class="fa-solid ${iconClass} text-[10px]"></i>
+                            <span class="text-xs text-stone-500 truncate">${day.location}</span>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        // --- Logic: Selections ---
+        function selectOverview() {
+            currentDayId = -1;
+            // Update UI styles
+            document.getElementById('overview-item').classList.add('active-day');
+            document.querySelectorAll('.day-item').forEach(el => el.classList.remove('active-day'));
+            
+            renderOverview();
+            showDetail();
+        }
+
+        function selectDay(index) {
+            currentDayId = index;
+            // Update UI styles
+            document.getElementById('overview-item').classList.remove('active-day');
+            document.querySelectorAll('.day-item').forEach((el, idx) => {
+               if(idx === index) el.classList.add('active-day');
+               else el.classList.remove('active-day');
+            });
+            renderDayDetail(itineraryData[index]);
+            showDetail();
+        }
+
+        function filterDays(filter) {
+            activeFilter = filter;
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.dataset.filter === filter) {
+                    btn.classList.remove('bg-stone-100', 'text-stone-600');
+                    btn.classList.add('bg-stone-800', 'text-white');
+                } else {
+                    btn.classList.add('bg-stone-100', 'text-stone-600');
+                    btn.classList.remove('bg-stone-800', 'text-white');
+                }
+            });
+            renderTimeline();
+        }
+
+        // --- Logic: Render Views ---
+        function renderOverview() {
+            const container = document.getElementById('day-content');
+            container.innerHTML = `
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-600 rounded-full mb-4 text-2xl">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-800">2026 珀斯珊瑚海岸之旅 (深度版)</h2>
+                        <p class="text-stone-500 mt-2">13天亲子探索 • 2000公里自驾 • 美食与奇观</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded border border-green-200"><i class="fa-solid fa-check"></i> 酒店已确认</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded border border-blue-200"><i class="fa-solid fa-file-lines"></i> 专家建议已整合</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Left: Highlights -->
+                        <div class="space-y-6">
+                            <h3 class="font-bold text-lg text-stone-700 border-b border-stone-100 pb-2">🌟 深度体验亮点</h3>
+                            <div class="space-y-4">
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-water"></i></div>
+                                    <div><h4 class="font-bold text-sm">海洋生物全接触</h4><p class="text-xs text-stone-500">不仅看海豚，还去寻找海牛(Dugong)，看喂鲨鱼，非常适合男孩子。</p></div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded bg-orange-50 text-orange-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-utensils"></i></div>
+                                    <div><h4 class="font-bold text-sm">味蕾升级</h4><p class="text-xs text-stone-500">从龙虾工厂到 State Buildings 的顶级 Sue Lewis 巧克力，以及 Kailis 的海鲜。</p></div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-bed"></i></div>
+                                    <div><h4 class="font-bold text-sm">舒适节奏</h4><p class="text-xs text-stone-500">卡尔巴里与猴子米亚均连住两晚，减少打包频率。</p></div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-stone-50 p-4 rounded-lg border border-stone-100 mt-4">
+                                <h4 class="font-bold text-sm mb-3 text-stone-600">自驾车型建议</h4>
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-car-side text-2xl text-stone-400"></i>
+                                    <p class="text-xs text-stone-500">建议租赁 <strong>大型 SUV (如 Toyota Kluger)</strong>，舒适且视野好，适合长途及4人行李。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Schematic Map -->
+                        <div class="bg-indigo-50 rounded-xl p-6 relative overflow-hidden">
+                            <h3 class="font-bold text-indigo-900 mb-6 flex items-center gap-2"><i class="fa-solid fa-route"></i> 住宿节点</h3>
+                            
+                            <div class="relative z-10 space-y-0 ml-2 border-l-2 border-indigo-200 pl-6 py-2">
+                                <div class="relative mb-6">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white"></span>
+                                    <h4 class="font-bold text-indigo-800">Perth (Novotel Murray St)</h4>
+                                    <p class="text-xs text-indigo-600">Day 1-2 (6月11-12)</p>
+                                </div>
+                                <div class="relative mb-6">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-indigo-300 rounded-full"></span>
+                                    <h4 class="font-bold text-indigo-800">Jurien Bay (Tourist Park)</h4>
+                                    <p class="text-xs text-indigo-600">Day 3 (6月13)</p>
+                                </div>
+                                <div class="relative mb-6">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-indigo-300 rounded-full"></span>
+                                    <h4 class="font-bold text-indigo-800">Kalbarri (Murchison View)</h4>
+                                    <p class="text-xs text-indigo-600">Day 4-5 (6月14-15)</p>
+                                </div>
+                                <div class="relative mb-6">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white"></span>
+                                    <h4 class="font-bold text-indigo-800">Monkey Mia (RAC Resort)</h4>
+                                    <p class="text-xs text-indigo-600">Day 6-7 (6月16-17)</p>
+                                </div>
+                                <div class="relative mb-6">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-indigo-300 rounded-full"></span>
+                                    <h4 class="font-bold text-indigo-800">Geraldton (African Reef)</h4>
+                                    <p class="text-xs text-indigo-600">Day 8 (6月18)</p>
+                                </div>
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white"></span>
+                                    <h4 class="font-bold text-indigo-800">Perth (Holiday Inn IHG)</h4>
+                                    <p class="text-xs text-indigo-600">Day 9-11 (6月19-21)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDayDetail(day) {
+            const container = document.getElementById('day-content');
+            
+            let routeHtml = '';
+            if (day.route) {
+                routeHtml = `
+                    <div class="mb-6 p-3 bg-orange-50 rounded-lg border border-orange-100 text-sm">
+                        <div class="font-bold text-orange-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-route"></i> 自驾路线 (${day.driving})</div>
+                        <div class="flex flex-wrap gap-2 items-center text-xs text-stone-600">
+                             ${day.route.map((r,i) => `<span>${r.from}</span> <i class="fa-solid fa-arrow-right text-orange-300"></i> ${i===day.route.length-1 ? `<span>${r.to}</span>` : ''}`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let mapImageHtml = '';
+            if (day.mapImage) {
+                mapImageHtml = `
+                    <div class="mb-6 rounded-xl overflow-hidden border border-stone-200 shadow-sm bg-stone-100">
+                        <img src="${day.mapImage}" alt="行程路线图" class="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-300" />
+                    </div>
+                `;
+            }
+
+            const aiHtml = day.type !== 'home' ? `
+                <div class="mt-8 border-t border-stone-100 pt-6">
+                    <button onclick="fetchDayInsights(${day.id})" class="w-full ai-card p-4 rounded-xl flex items-center justify-between shadow-sm hover:shadow-md transition group text-left">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <div>
+                                <h4 class="font-bold text-stone-800 group-hover:text-orange-600 transition text-sm">✨ AI 发现更多惊喜</h4>
+                                <p class="text-xs text-stone-500">获取 ${day.location} 的隐藏玩法与亲子冷知识</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-stone-300"></i>
+                    </button>
+                    <div id="ai-result-${day.id}" class="hidden mt-4 bg-white p-4 rounded border border-stone-100 text-sm"></div>
+                </div>
+            ` : '';
+
+            container.innerHTML = `
+                <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                    <div class="h-28 bg-gradient-to-r from-stone-200 to-stone-300 relative">
+                        <!-- Accommodation Badge -->
+                        <div class="absolute right-4 top-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-stone-700 shadow-sm flex items-center gap-2 border border-white">
+                             <i class="fa-solid fa-moon text-indigo-500"></i> ${day.stay}
+                        </div>
+                        <div class="absolute -bottom-8 left-6 md:left-8 w-16 h-16 bg-white rounded-lg shadow-md flex items-center justify-center text-2xl border border-stone-100">
+                             <i class="fa-solid ${day.type === 'roadtrip' ? 'fa-car text-orange-500' : 'fa-city text-blue-500'}"></i>
+                        </div>
+                    </div>
+                    <div class="pt-10 px-6 md:px-8 pb-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="text-xs font-bold text-stone-400 uppercase tracking-wide">${day.fullDate}</div>
+                                <h2 class="text-2xl font-bold text-stone-800 mt-1 leading-tight">${day.title}</h2>
+                            </div>
+                            <span class="bg-stone-100 text-stone-600 text-xs px-2 py-1 rounded">${day.location}</span>
+                        </div>
+                        <p class="text-stone-600 text-sm mb-6">${day.desc}</p>
+                        
+                        ${routeHtml}
+
+                        ${mapImageHtml}
+ 
+                        <div class="space-y-6">
+                            ${day.activities.map(act => `
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center shrink-0"><i class="fa-solid ${act.icon} text-xs"></i></div>
+                                        <div class="h-full w-px bg-stone-100 my-1"></div>
+                                    </div>
+                                    <div class="pb-2">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-xs font-mono font-bold text-stone-400 bg-stone-50 px-1 rounded">${act.time}</span>
+                                            <h4 class="text-sm font-bold text-stone-800">${act.title}</h4>
+                                        </div>
+                                        <p class="text-sm text-stone-500 leading-relaxed">${act.note}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        ${aiHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function fetchDayInsights(id) {
+            const el = document.getElementById(`ai-result-${id}`);
+            if(!el.classList.contains('hidden')) return;
+            el.classList.remove('hidden');
+            el.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            
+            const day = itineraryData[id];
+            const prompt = `为在${day.location}的一家四口（孩子10/13岁）提供3个简短旅行建议（美食/隐藏点/冷知识）。请结合"${day.activities.map(a=>a.title).join(',')}"的上下文。中文。`;
+            const text = await callGemini(prompt);
+            el.innerHTML = marked.parse(text);
+        }
+
+        function generatePackingList() {
+            document.getElementById('packing-modal').classList.remove('hidden');
+            const content = document.getElementById('packing-content');
+            if(content.innerHTML.trim()) return;
+            
+            document.getElementById('packing-loading').classList.remove('hidden');
+            callGemini("为6月西澳珀斯-鲨鱼湾亲子自驾游生成打包清单。重点：防风外套(冬季)、防蝇网(卡尔巴里)、晕车药(长途)、墨镜(滑沙)。中文Markdown格式。").then(res => {
+                document.getElementById('packing-loading').classList.add('hidden');
+                content.innerHTML = marked.parse(res);
+            });
+        }
+        function closePackingModal() { document.getElementById('packing-modal').classList.add('hidden'); }
+
+        // Init
+        renderTimeline();
+        selectOverview(); // Default to Overview
+        
+        // Handle Resize to reset views if needed
+        window.addEventListener('resize', () => {
+            if(window.innerWidth >= 768) {
+                document.getElementById('sidebar-panel').classList.remove('mobile-hidden');
+                document.getElementById('detail-panel').classList.remove('mobile-hidden');
+            } else {
+                // Re-apply current state logic
+                if (currentDayId === -1 && !document.querySelector('.active-day')) {
+                     // Initial state or overview selected
+                     showDetail(); 
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
