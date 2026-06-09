@@ -218,25 +218,26 @@ def main():
             {time:"18:00", title:"特色晚餐：Long Chim 泰式街头美食", icon:"fa-pepper-hot", note:"【美食打卡 & 4.5+⭐, $$】推荐两家市区极赞晚餐：<br>① <b>Long Chim</b> (4.5⭐) - 隐藏在 State Buildings 地下的神秘餐厅，由米其林传奇主厨 David Thompson 创办，将曼谷街头的火辣辛香完美还原，其招牌的炭火红咖喱鸭和泰式炒河粉让人欲罢不能；<br>② <b>Ribs & Burgers Perth</b> (4.4⭐) - 距离 Holiday Inn 仅 200 米，主打慢火烟熏猪肋排和手工精品汉堡，氛围极其轻松欢快，无需预约，深受孩子们喜爱。<br>【拍照推荐】Long Chim 的地下室装饰着色彩斑斓的街头涂鸦，在幽暗昏黄的霓虹灯光下，具有极强的胶片复古感。"}
         ] 
     },
-    { 
+        { 
         id: 10, 
         date: "6月21日", 
         fullDate: "6月21日 (周日)", 
-        title: "双城记：罗特尼斯 & 弗里曼特尔", 
-        location: "Rottnest / Fremantle", 
+        title: "亲子探秘：动物园与恐龙博物馆", 
+        location: "Perth", 
         type: "city", 
         stay: "Holiday Inn Perth City Centre By IHG", 
-        driving: "渡轮/火车", 
-        tags: ["环岛巴士", "集市", "炸鱼薯条"], 
-        desc: "开启西澳标志性的亲子双岛探秘！清晨乘渡轮沿天鹅河顺流而下直达罗特尼斯岛，寻找世界上最快乐的动物——短尾矮袋鼠 (Quokka)，在绿松石般的印度洋沙滩嬉戏；下午乘船折返至历史悠久的海港小镇弗里曼特尔，打卡热闹的百年周末集市，最后在情人港吹着海风享用最纯正的炸鱼薯条。", 
+        driving: "渡轮/步行", 
+        mapImage: "images/june21_route_map.png", 
+        tags: ["天鹅河渡轮", "珀斯动物园", "西澳博物馆", "亲子互动", "高分早午餐", "风味晚餐"], 
+        desc: "今天是专属的亲子快乐时光！早晨在市区享用高品质早午餐，随后步行至伊丽莎白码头，搭乘充满乐趣的跨河渡轮前往南半球历史悠久的珀斯动物园，近距离观察袋鼠与考拉；中午在南珀斯沿河享用美味午餐，下午乘渡轮折返，前往拥有丰富互动展厅和巨型恐龙骨架的西澳博物馆 Boola Bardip，晚上在北区享用风味晚餐后返回酒店。", 
         activities: [
-            {time:"07:30", title:"第一站：天鹅河渡轮启航 (Barrack St)", icon:"fa-ship", note:"【交通指南 & 拍照推荐】从 Barrack Street Jetty 码头登船，搭乘 Rottnest Express 渡轮。购买多港口往返票 (Perth出发，Fremantle回)。航程中渡轮会穿过天鹅河，两岸可以饱览国王公园的悬崖峭壁以及 Dalkeith 等高档河畔豪宅区，随后驶入印度洋。<br>【拍照推荐】坐在船尾的露天甲板，以逐渐远去的珀斯市区摩天大楼和泛起白色浪花的深蓝色天鹅河为背景，拍摄极其大气的航行照片。"},
-            {time:"09:00", title:"第二站：罗特尼斯岛 (Rottnest Island) 寻找微笑袋鼠", icon:"fa-camera", note:"【打卡点 & 亲子导游秘籍】罗特尼斯岛 (原住民称为 Wadjemup) 是一座无车生态岛。带孩子推荐在码头购买 <b>Island Explorer Bus (环岛观光巴士)</b> 票，可以随上随下，比骑自行车省力得多，特别适合带娃。前往 Thompson Bay 附近的树荫下，寻找软萌的短尾矮袋鼠 (Quokka)。<br>【拍照秘籍】<b>寻找 Quokka 合影时，切记不能触碰或喂食它们（这是违法的，会被罚款）</b>。最佳技巧是将手机倒过来贴近地面，使用超广角镜头，开启自拍定时，等好奇的 Quokka 主动凑近镜头，就能拍到它仿佛在“微笑”的网红合影！"},
-            {time:"14:30", title:"第三站：前往弗里曼特尔 (Fremantle B-Shed)", icon:"fa-anchor", note:"搭乘下午的渡轮折返，在 Fremantle B-Shed 码头下船。弗里曼特尔 (本地人亲切地称为 Freo) 是世界上保存最完好的19世纪港口街区之一，红砖外墙的维多利亚建筑鳞次栉比，散发着浓郁的文艺与历史气息。"},
-            {time:"15:30", title:"第四站：弗里曼特尔周末集市 (Fremantle Markets)", icon:"fa-store", note:"【打卡点 & 故事背景】建于1897年，这座百年老集市仅在周五、周六和周日开放，非常热闹。集市里飘荡着香浓的咖啡味，您可以买到著名的西澳蜂蜜蛋糕 (Honeycake)、手工皂、原住民手工艺品，还能看到精彩的街头艺人表演。孩子们可以在这里挑选有趣的纪念品。"},
-            {time:"17:30", title:"晚餐：Kailis 海鲜大餐与海港落日", icon:"fa-fish", note:"【美食打卡 & 4.5+⭐, $$】推荐两家弗里曼特尔标志性晚餐：<br>① <b>Kailis Fish Market Café</b> (4.5⭐) - 坐落在 Fishing Boat Harbour 渔人码头旁，自1928年起就由当地希腊裔家族运营。他们的招牌海鲜拼盘 (Seafood Platter) 里面有鲜甜的生蚝、大虾、青口贝和金黄酥脆的炸鱼薯条，坐在木栈道上享用，看渔船归航，夕阳洒在水面，十分享受；<br>② <b>Cicerello's Fremantle</b> (4.1⭐) - 同样位于港口旁，主打老字号炸鱼薯条，店内拥有西澳最大的私人海水水族箱，孩子们可以一边吃饭一边欣赏五彩斑斓的游鱼。<br>【安全警示】<b>码头的海鸥极其凶猛且善于抢食，在露天座位就餐时，千万看管好盘中的薯条，切勿主动喂食海鸥。</b>"},
-            {time:"19:30", title:"返回珀斯", icon:"fa-train", note:"在 Fremantle 火车站搭乘 Fremantle Line 城际火车（约30分钟）直达珀斯 CBD，或者用 Uber 叫车返回 Holiday Inn 酒店，结束丰富充实的一天。"}
-        ] 
+            {time:"09:00", title:"悠闲早午餐 (Brunch) 推荐", icon:"fa-mug-hot", note:"【市区高分 Brunch 推荐】在开始一天的精彩亲子行程前，推荐在酒店附近享用丰盛的早午餐：<br>① <b>La Veen Coffee & Kitchen</b> (4.6⭐) - 距离酒店约 400 米，主打精品手冲咖啡和创意早午餐，其北非蛋和特制土豆饼非常适合家人口味；<br>② <b>Tiisch</b> (4.6⭐) - 距离酒店约 500 米，拥有充满绿植的温室美学设计，招牌的抹茶薄饼和炒蛋深受孩子们喜爱。"},
+            {time:"10:15", title:"跨河航行：天鹅河渡轮体验", icon:"fa-ship", note:"【亲子导游体验】从酒店步行约 10 分钟（750米）抵达伊丽莎白码头 (Elizabeth Quay Jetty)，搭乘 Transperth 跨河渡轮（每 15-30 分钟一班）前往南珀斯的门兹街码头 (Mends Street Jetty)。这趟仅需 10 分钟的航程对孩子们来说像是一次微型冒险，可以在开阔的河面上远眺珀斯 CBD 的宏伟天际线。抵达后沿门兹街漫步约 500 米即可到达动物园正门。"},
+            {time:"10:30", title:"第一站：珀斯动物园 (Perth Zoo) 探秘", icon:"fa-paw", note:"【打卡点 & 历史背景】建于1898年的珀斯动物园是澳洲最具历史底蕴的动物园之一，这里精心复原了野生动物的自然栖息环境。亲子必看“澳洲漫步区 (Australian Walkabout)”，可以让孩子们在全开放式的红土环境中近距离观察温顺的袋鼠、憨态可掬的考拉和袋熊。园内还有巨大的非洲草原区 and 亚洲热带雨林区。<br>【拍照推荐】在澳洲漫步区，蹲下身体以低视角抓拍孩子与身旁散步的小袋鼠对视的自然瞬间，背景的红土和桉树极具西澳自然风情。"},
+            {time:"13:00", title:"美味午餐推荐（南珀斯 Mends St 附近）", icon:"fa-utensils", note:"【高分午餐推荐 & 4.5+⭐, $$】动物园出门步行 5 分钟的 Mends St 商业街有非常优秀的家庭友好餐厅：<br>① <b>Secret Garden Cafe & Patisserie</b> (4.5⭐) - 距离动物园仅 300 米，拥有幽静的后花园庭院，主打高水准的汉堡、沙拉与精致手工蛋糕，氛围温馨舒适；<br>② <b>Automatic</b> (4.6⭐) - 距离动物园 400 米，是一家极具人气的意式餐厅，其招牌的薄底罗马木炭烤比萨和手工松露意面分量充足，口味极佳，深得孩子们喜爱。"},
+            {time:"14:30", title:"第二站：西澳博物馆 Boola Bardip (WA Museum)", icon:"fa-monument", note:"【打卡点 & 导游背景介绍】乘渡轮返回市区，随后乘坐免费的蓝猫巴士 (Blue CAT) 直达珀斯文化中心。<i>Boola Bardip</i> 在当地原住民诺格语中意为“许多故事”。博物馆建筑将历史保护古迹与超现代的几何大厅完美交融。孩子们绝对不能错过<b>“野生与生态展厅 (Wild Life Gallery)”</b>，这里悬挂着巨大的蓝鲸骨架，还有栩栩如生的恐龙化石及本土珍稀动物标本，互动式多媒体设备非常多，真正做到了寓教于乐。<br>【拍照推荐】在博物馆二楼的玻璃连廊，以挑高的现代钢结构与红砖古建筑交界处为背景，能拍出极具建筑美学张力的时尚合影。也可以站在巨型恐龙骨架正下方仰拍，拍出震撼的视觉效果。"},
+            {time:"18:00", title:"特色晚餐推荐（北区/市区附近）", icon:"fa-bowl-food", note:"【高分晚餐推荐 & 4.5+⭐, $$】推荐两家位于博物馆步行 5 分钟范围内的优质风味餐厅：<br>① <b>Bivouac Canteen & Bar</b> (4.6⭐) - 位于 William St，是一家非常温馨的艺术风中东共享小酒馆，招牌的 8 小时慢烤羊肩肉肉质酥烂，配上面包和奶油鹰嘴豆泥，极适合全家分享；<br>② <b>Authentic Bites Dumpling House (鼎泰丰级小笼)</b> (4.6⭐) - 位于 Newcastle St，是珀斯最火爆的手工面点店，招牌的鲜肉小笼包、红油抄手和生煎包皮薄汁多，非常对中国胃，深受孩子喜爱，建议提早去排队。"}
+        ]
     },
     { 
         id: 11, 
@@ -486,25 +487,26 @@ def main():
             {time:"18:00", title:"Dinner at Long Chim", icon:"fa-pepper-hot", note:"【Culinary Highlights】Two fantastic $$ options:<br>① <b>Long Chim</b> (4.5⭐) - Tucked inside the historic basement of the State Buildings, run by Michelin-starred chef David Thompson. It serves authentic, spicy Bangkok street food like rich roast duck red curry and charcoal pork skewers in a moody, graffiti-walled underground space;<br>② <b>Ribs & Burgers Perth</b> (4.4⭐) - Just 200m from your hotel, offering amazing smoky pork ribs, soft brioche buns, and thick milkshakes in a casual setting.<br>【Photo Tips】The underground walls of Long Chim are adorned with colorful graffiti, offering a cool filmic street look under neon lighting."}
         ] 
     },
-    { 
+        { 
         id: 10, 
         date: "Jun 21", 
         fullDate: "Jun 21 (Sun)", 
-        title: "Rottnest & Fremantle", 
-        location: "Rottnest / Fremantle", 
+        title: "Family Adventure: Perth Zoo & Boola Bardip", 
+        location: "Perth", 
         type: "city", 
         stay: "Holiday Inn Perth City Centre By IHG", 
-        driving: "Ferry/Train", 
-        tags: ["Island Bus", "Markets", "Fish & Chips"], 
-        desc: "Embark on WA's ultimate island-and-heritage family adventure! Cruise down the Swan River to Rottnest Island to meet the world's happiest animal, the Quokka, and walk on turquoise beaches. In the afternoon, return to the historic port town of Fremantle, browse the lively century-old markets, and enjoy fresh, crispy fish & chips at the harbor for sunset.", 
+        driving: "Ferry/Walking", 
+        mapImage: "images/june21_route_map.png", 
+        tags: ["Ferry Ride", "Perth Zoo", "WA Museum", "Family Friendly", "Fine Brunch", "Flavored Dinner"], 
+        desc: "Today is dedicated to pure family joy in the city! After a hearty CBD brunch, hop on the ferry across the Swan River to the historic Perth Zoo to meet koalas and kangaroos. Enjoy a premium lunch in South Perth, then cruise back to explore the interactive galleries and giant dinosaur skeletons at the WA Museum Boola Bardip, ending the day with a delicious Northbridge dinner.", 
         activities: [
-            {time:"07:30", title:"Ferry from Barrack St", icon:"fa-ship", note:"【Transit & Photo Tips】Board the Rottnest Express ferry at Barrack Street Jetty. We recommend booking a multi-port ticket (depart from Perth, return to Fremantle). The cruise glides past Kings Park cliffs and the opulent mansions of Peppermint Grove before heading into the ocean.<br>【Photo Tips】Stand on the open-air rear deck to snap a panoramic shot of the departing Perth city skyline framed by the white boat wake."},
-            {time:"09:00", title:"Rottnest Island", icon:"fa-camera", note:"【Check-in & Expert Tips】Rottnest Island (Wadjemup to the Noongar people) is a car-free sanctuary. For families, the **Island Explorer Bus** (hop-on, hop-off) is highly recommended over bikes. Head to Thompson Bay's shaded grassy areas to find the adorable, cat-sized **Quokka**.<br>【Photo Tips】<b>It is strictly illegal to touch or feed the quokkas (fines apply).</b> Simply crouch down, flip your phone upside down close to the ground, use the wide-angle camera, and wait for them to approach for the perfect 'smiling' selfie!"},
-            {time:"14:30", title:"Ferry to Fremantle", icon:"fa-anchor", note:"Board the afternoon ferry and disembark at Fremantle B-Shed. Fremantle (lovingly called Freo) is one of the world's best-preserved 19th-century port towns, famous for its grand Victorian-style limestone buildings and bohemian maritime atmosphere."},
-            {time:"15:30", title:"Fremantle Markets", icon:"fa-store", note:"【Check-in & History】Established in 1897, these historic markets are only open Friday through Sunday. The air is filled with live acoustic music and aromas of fresh food. Treat the family to a slice of the famous WA **Honeycake**, browse local timber crafts, and check out street performers in the market courtyard."},
-            {time:"17:30", title:"Dinner at Kailis Fish Market", icon:"fa-fish", note:"【Culinary Highlights】Two iconic $$ options at Fishing Boat Harbour:<br>① <b>Kailis Fish Market Café</b> (4.5⭐) - Run by the Greek-Australian Kailis family since 1928. Sit on the outdoor deck overlooking the harbor and share their epic Seafood Platter featuring fresh local oysters, prawns, and crispy battered fish & chips;<br>② <b>Cicerello's Fremantle</b> (4.1⭐) - A legendary competitor housing massive marine aquariums inside, letting kids marvel at fish while eating.<br><b>Warning:</b> Local seagulls are bold thieves. Guard your chips and do not feed them!"},
-            {time:"19:30", title:"Return to Perth", icon:"fa-train", note:"Walk to the historic Fremantle Railway Station and catch the Fremantle Line train (30 mins) directly back to Perth station, or book an Uber back to your hotel."}
-        ] 
+            {time:"09:00", title:"Leisurely Brunch Recommendations", icon:"fa-mug-hot", note:"【CBD Brunch Recommendations】Fuel up for a fun family day at highly-rated 4.5+ star ($$) options near the hotel:<br>① <b>La Veen Coffee & Kitchen</b> (4.6⭐) - 400m from the hotel, set in a historic red-brick building, serving excellent specialty pour-over coffee and creative staples like potato rosti with poached eggs;<br>② <b>Tiisch</b> (4.6⭐) - 500m from the hotel, a beautiful plant-filled conservatory cafe famous for creative eggs and matcha pancakes that kids love."},
+            {time:"10:15", title:"Scenic Ferry Crossing to South Perth", icon:"fa-ship", note:"【Transit & Kids Fun】Walk 10 mins (750m) from your hotel to Elizabeth Quay Jetty. Board the Transperth Ferry for a scenic 10-minute crossing of the Swan River to Mends Street Jetty in South Perth. The short boat ride is a highlight for kids and offers stunning views of the Perth CBD skyline. From Mends St Jetty, walk 500m up the street to the zoo entrance."},
+            {time:"10:30", title:"Stop 1: Perth Zoo Wildlife Safari", icon:"fa-paw", note:"【Check-in & History】Established in 1898, Perth Zoo is a historic botanical and zoological sanctuary. Don't miss the open-air **Australian Walkabout**, where kids can wander among free-roaming kangaroos and spot sleepy koalas and wombats. The zoo also features massive African Savannah and Asian Rainforest zones.<br>【Photo Tips】In the Australian Walkabout area, crouch down to take a low-angle shot of your kids interacting naturally with a roaming kangaroo, capturing the red sand and gum trees in the background."},
+            {time:"13:00", title:"Lunch Recommendations in South Perth", icon:"fa-utensils", note:"【South Perth Dining & 4.5+⭐, $$】Try two highly-rated family-friendly spots along Mends Street:<br>① <b>Secret Garden Cafe & Patisserie</b> (4.5⭐) - 300m from the zoo, featuring a tranquil garden courtyard, serving delicious burgers, salads, and artisan cakes;<br>② <b>Automatic</b> (4.6⭐) - 400m from the zoo, a lively Italian venue serving amazing Roman-style thin-crust wood-fired pizzas and fresh pastas, perfect for sharing."},
+            {time:"14:30", title:"Stop 2: WA Museum Boola Bardip", icon:"fa-monument", note:"【Check-in & Expert Tips】Ferry back to Elizabeth Quay, then take the free Blue CAT bus directly to the Perth Cultural Centre. *Boola Bardip* means 'many stories' in the Noongar language. The museum is a masterpiece blending heritage buildings with hyper-modern halls. Kids will be mesmerized by the **Wild Life Gallery**, featuring a massive blue whale skeleton, giant dinosaur fossils, and interactive touchscreens.<br>【Photo Tips】Stand in the grand glass-and-steel atrium connecting the modern wing to the heritage brick building for a stunning architectural family portrait. Or shoot looking upward from beneath the massive dinosaur skeleton for a dramatic scale effect."},
+            {time:"18:00", title:"Dinner Recommendations in Northbridge", icon:"fa-bowl-food", note:"【Northbridge Dining & 4.5+⭐, $$】Recommend two great family spots within 5 minutes' walk of the museum:<br>① <b>Bivouac Canteen & Bar</b> (4.6⭐) - On William St, a cozy, artsy Middle Eastern sharing house famous for its 8-hour slow-cooked lamb shoulder with flatbread and creamy hummus;<br>② <b>Authentic Bites Dumpling House</b> (4.6⭐) - On Newcastle St, Perth's most popular dumpling spot serving incredible handmade soup dumplings (Xiao Long Bao) and pan-fried pork buns that kids adore. Get there early to avoid the queue."}
+        ]
     },
     { 
         id: 11, 
