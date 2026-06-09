@@ -195,11 +195,11 @@ function renderOverview() {
         { day: "D5", date: "6月15日 (周一)", title: "卡尔巴里峡谷探秘", stay: "Murchison View Apartments", transit: "景区段自驾", sights: ["世界之窗 (Nature's Window) 经典红砂岩石框", "卡尔巴里空中步道 (Skywalk) 悬空峡谷全景俯瞰"] },
         { day: "D6", date: "6月16日 (周二)", title: "前往鲨鱼湾", stay: "RAC Monkey Mia Dolphin Resort", transit: "自驾约 400 公里", sights: ["细小贝壳铺就的贝壳沙滩 (Shell Beach)", "抵达鲨鱼湾红土蓝海度假村，沙滩漫步"] },
         { day: "D7", date: "6月17日 (周三)", title: "海豚与野生海洋", stay: "RAC Monkey Mia Dolphin Resort", transit: "度假村休整", sights: ["野生宽吻海豚晨间浅滩互动喂食", "乘野生生态游船寻找海牛 (Dugong) 与海龟"] },
-        { day: "D8", date: "6月18日 (周四)", title: "南下杰拉尔顿", stay: "African Reef Geraldton", transit: "自驾约 400 公里", sights: ["哈美林池 (Hamelin Pool) 地球最古老生命化石叠层石", "杰拉尔顿海滨 HMAS Sydney II 纪念碑日落"] },
+        { day: "D8", date: "6月18日 (周四)", title: "南下杰拉尔顿", stay: "African Reef Resort", transit: "自驾约 400 公里", sights: ["哈美林池 (Hamelin Pool) 地球最古老生命化石叠层石", "杰拉尔顿海滨 HMAS Sydney II 纪念碑日落"] },
         { day: "D9", date: "6月19日 (周五)", title: "返回珀斯", stay: "Holiday Inn Perth City Centre By IHG", transit: "自驾约 420 公里", sights: ["倾斜树 (Leaning Trees) 奇观打卡", "格里诺 (Greenough) 历史小镇人文漫步"] },
         { day: "D10", date: "6月20日 (周六)", title: "珀斯市区购物放松", stay: "Holiday Inn Perth City Centre By IHG", transit: "市区步行 / CAT 巴士", sights: ["Murray/Hay St 步行街与复古商廊手信采购", "Koko Black 巧克力工坊下午茶品鉴"] },
         { day: "D11", date: "6月21日 (周日)", title: "亲子动物园与博物馆", stay: "Holiday Inn Perth City Centre By IHG", transit: "市区/天鹅谷自驾约1小时", sights: ["天鹅谷凯维森野生动物园 (Caversham) 喂袋鼠及考拉合影", "西澳博物馆 Boola Bardip 恐龙化石与蓝鲸骨架"] },
-        { day: "D12", date: "6月22日 (周一)", title: "返程与告别", stay: "飞机上 (On Board)", transit: "市区步行 / 机场送机", sights: ["伊丽莎白码头 (The Reveley) 景观午餐", "Raine Square 特产蜂蜜采购", "前往机场办理 TRS 退税并登机"] },
+        { day: "D12", date: "6月22日 (周一)", title: "期待下次的重逢", stay: "飞机上 (On Board)", transit: "市区步行 / 机场送机", sights: ["伊丽莎白码头 (The Reveley) 景观午餐", "Raine Square 特产蜂蜜采购", "前往机场办理 TRS 退税并登机"] },
         { day: "D13", date: "6月23日 (周二)", title: "抵达新加坡", stay: "温馨的家 (Home)", transit: "结束旅行", sights: ["降落新加坡樟宜机场 (06:30)", "Jewel 星耀樟宜室内雨漩涡瀑布打卡"] }
     ] : [
         { day: "D1", date: "Jun 11 (Thu)", title: "Arrive in Perth", stay: "Novotel Perth Murray Street", transit: "Airport transfer ~30 mins", sights: ["University of Western Australia (UWA) campus tour", "Walk to Crawley Blue Boat House on Swan River"] },
@@ -209,7 +209,7 @@ function renderOverview() {
         { day: "D5", date: "Jun 15 (Mon)", title: "Kalbarri Gorges", stay: "Murchison View Apartments", transit: "Drive inside National Park", sights: ["Nature's Window iconic valley views", "Kalbarri Skywalk cantilevered viewing platforms"] },
         { day: "D6", date: "Jun 16 (Tue)", title: "To Shark Bay", stay: "RAC Monkey Mia Dolphin Resort", transit: "Drive ~400 km", sights: ["Walk on millions of tiny shells at Shell Beach", "Arrive at red-sand and blue-ocean RAC Resort"] },
         { day: "D7", date: "Jun 17 (Wed)", title: "Dolphins & Marine Cruise", stay: "RAC Monkey Mia Dolphin Resort", transit: "Resort Stay", sights: ["Interact with wild dolphins at beach shallow waters", "Marine Wildlife Cruise to spot dugongs and turtles"] },
-        { day: "D8", date: "Jun 18 (Thu)", title: "Southbound to Geraldton", stay: "African Reef Geraldton", transit: "Drive ~400 km", sights: ["Hamelin Pool ancient Stromatolites fossils", "HMAS Sydney II Memorial sunset views in Geraldton"] },
+        { day: "D8", date: "Jun 18 (Thu)", title: "Southbound to Geraldton", stay: "African Reef Resort", transit: "Drive ~400 km", sights: ["Hamelin Pool ancient Stromatolites fossils", "HMAS Sydney II Memorial sunset views in Geraldton"] },
         { day: "D9", date: "Jun 19 (Fri)", title: "Return to Perth", stay: "Holiday Inn Perth City Centre By IHG", transit: "Drive ~420 km", sights: ["Photo session with the wind-bent Leaning Trees", "Greenough historical hamlet stroll"] },
         { day: "D10", date: "Jun 20 (Sat)", title: "Perth Shopping & Tea", stay: "Holiday Inn Perth City Centre By IHG", transit: "Walking / CAT Free Bus", sights: ["Murray/Hay St Mall and heritage arcade shopping", "Koko Black specialty hot chocolate afternoon tea"] },
         { day: "D11", date: "Jun 21 (Sun)", title: "Wildlife Park & Museum", stay: "Holiday Inn Perth City Centre By IHG", transit: "Drive ~1 hour", sights: ["Caversham Wildlife Park kangaroo feeding & koala photos", "WA Museum Boola Bardip dinosaurs and whale exhibits"] },
