@@ -186,87 +186,212 @@ function filterDays(filter) {
 function renderOverview() {
     const container = document.getElementById('day-content');
     const t = uiTranslations[currentLang];
-    
+    const isZh = currentLang === 'zh';
+
+    // Data for Stays
+    const stays = isZh ? [
+        { hotel: "Novotel Perth Murray Street", location: "珀斯 CBD", dates: "6月11日 - 6月13日", duration: "2 晚", icon: "fa-hotel", color: "bg-blue-50 text-blue-600", note: "现代化高空泳池酒店，适合刚抵达休整" },
+        { hotel: "Jurien Bay Tourist Park", location: "朱里恩湾", dates: "6月13日 - 6月14日", duration: "1 晚", icon: "fa-tents", color: "bg-orange-50 text-orange-600", note: "靠近海滩与尖峰石阵，自驾第一站" },
+        { hotel: "Murchison View Apartments", location: "卡尔巴里", dates: "6月14日 - 6月16日", duration: "2 晚", icon: "fa-house-chimney", color: "bg-purple-50 text-purple-600", note: "海滨公寓连住，减少收拾行李折腾" },
+        { hotel: "RAC Monkey Mia Dolphin Resort", location: "猴子米亚", dates: "6月16日 - 6月18日", duration: "2 晚", icon: "fa-umbrella-beach", color: "bg-emerald-50 text-emerald-600", note: "海豚沙滩度假村，出门即是粉蓝大海" },
+        { hotel: "African Reef Geraldton", location: "杰拉尔顿", dates: "6月18日 - 6月19日", duration: "1 晚", icon: "fa-water", color: "bg-cyan-50 text-cyan-600", note: "海滨汽车旅馆，南下中途舒适休整" },
+        { hotel: "Holiday Inn Perth City Centre By IHG", location: "珀斯 CBD", dates: "6月19日 - 6月22日", duration: "3 晚", icon: "fa-hotel", color: "bg-indigo-50 text-indigo-600", note: "CBD中心商业街，便利购物与返程" }
+    ] : [
+        { hotel: "Novotel Perth Murray Street", location: "Perth CBD", dates: "Jun 11 - Jun 13", duration: "2 Nights", icon: "fa-hotel", color: "bg-blue-50 text-blue-600", note: "Modern room & heated pool, perfect for arrival recovery" },
+        { hotel: "Jurien Bay Tourist Park", location: "Jurien Bay", dates: "Jun 13 - Jun 14", duration: "1 Night", icon: "fa-tents", color: "bg-orange-50 text-orange-600", note: "Beachside cabins, ideal base near Pinnacles" },
+        { hotel: "Murchison View Apartments", location: "Kalbarri", dates: "Jun 14 - Jun 16", duration: "2 Nights", icon: "fa-house-chimney", color: "bg-purple-50 text-purple-600", note: "Waterfront apartments, 2-night stress-free stay" },
+        { hotel: "RAC Monkey Mia Dolphin Resort", location: "Monkey Mia", dates: "Jun 16 - Jun 18", duration: "2 Nights", icon: "fa-umbrella-beach", color: "bg-emerald-50 text-emerald-600", note: "Dolphin beach resort, walk out to turquoise waters" },
+        { hotel: "African Reef Geraldton", location: "Geraldton", dates: "Jun 18 - Jun 19", duration: "1 Night", icon: "fa-water", color: "bg-cyan-50 text-cyan-600", note: "Waterfront motel, comfortable stopover on southbound leg" },
+        { hotel: "Holiday Inn Perth City Centre By IHG", location: "Perth CBD", dates: "Jun 19 - Jun 22", duration: "3 Nights", icon: "fa-hotel", color: "bg-indigo-50 text-indigo-600", note: "Heart of CBD shopping malls, convenient for departure" }
+    ];
+
+    // Data for Key Attractions
+    const attractions = isZh ? [
+        { category: "🏙️ 珀斯市区 & 亲子玩乐 (Perth & Family)", color: "border-blue-100 bg-blue-50/20", icon: "fa-city text-blue-500", list: [
+            { name: "西澳大学 & 蓝房子", desc: "古老罗马式砂岩拱廊学府，漫步河畔打卡静谧梦幻的蓝色水上小屋。" },
+            { name: "国王公园", desc: "南半球最大的城市公园，俯瞰天河与珀斯天际线，打卡750年树龄的巨型面包树。" },
+            { name: "凯维森野生动物园", desc: "天鹅谷内的动物天堂，亲手喂食袋鼠、拥抱袋熊并免费与考拉同框合影。" },
+            { name: "西澳博物馆 Boola Bardip", desc: "极具设计感的现代展厅，近距离观察恐龙化石、悬挂蓝鲸骨架，儿童互动极多。" }
+        ]},
+        { category: "🚗 自驾沿线 & 地质奇观 (Roadtrip Wonders)", color: "border-orange-100 bg-orange-50/20", icon: "fa-mountain-sun text-orange-500", list: [
+            { name: "兰斯林沙丘 (滑沙)", desc: "细腻纯白的沙漠与蔚蓝天空交织，带孩子们坐在滑沙板上呼啸而下，体验极致刺激。" },
+            { name: "尖峰石阵 (Pinnacles)", desc: "数千座黄金石灰岩石柱矗立在黄色沙漠中，仿佛步入异星地表的宏伟景象。" },
+            { name: "赫特泻湖 (粉红湖)", desc: "天然粉色盐湖，在阳光下呈现极其梦幻的粉红色彩，极力推荐空中观光飞机俯瞰。" },
+            { name: "卡尔巴里国家公园", desc: "站在壮丽的 Nature's Window (世界之窗) 前俯瞰红褐色峡谷，漫步悬空天际步道。" }
+        ]},
+        { category: "🐬 海洋生态 & 动物接触 (Marine & Wildlife)", color: "border-emerald-100 bg-emerald-50/20", icon: "fa-shrimp text-emerald-500", list: [
+            { name: "Monkey Mia 野生海豚", desc: "度假村沙滩浅滩上观赏野生宽吻海豚的清晨近距离互动与喂食，孩子们的最爱。" },
+            { name: "野生海洋生态游船", desc: "乘船出海寻找稀有海牛 (Dugong)、大海龟，并近距离观看船员用鱼饵吸引野生鲨鱼。" },
+            { name: "贝壳沙滩 & 叠层石", desc: "纯由数以亿计细小贝壳铺就的白色沙滩；哈美林池旁观赏地球上最古老的生命化石叠层石。" }
+        ]}
+    ] : [
+        { category: "🏙️ Perth City & Family Fun", color: "border-blue-100 bg-blue-50/20", icon: "fa-city text-blue-500", list: [
+            { name: "UWA & Blue Boat House", desc: "Historic sandstone Romanesque campus and the iconic, picturesque blue boathouse on Swan River." },
+            { name: "Kings Park", desc: "Overlooking the Swan River and CBD skyline, home to a massive 750-year-old Boab Tree." },
+            { name: "Caversham Wildlife Park", desc: "Swan Valley's gem. Hand-feed kangaroos, meet wombats, and take photos with koalas." },
+            { name: "WA Museum Boola Bardip", desc: "Masterpiece blending heritage buildings and modern wing. Features giant whale skeletons and dinosaurs." }
+        ]},
+        { category: "🚗 Coastal Road Trip & Geology", color: "border-orange-100 bg-orange-50/20", icon: "fa-mountain-sun text-orange-500", list: [
+            { name: "Lancelin Sand Dunes", desc: "Massive pure white sand dunes. Slide down on sandboards for pure family excitement." },
+            { name: "Pinnacles Desert", desc: "Thousands of golden limestone pillars rising out of yellow sand like a sci-fi alien landscape." },
+            { name: "Hutt Lagoon (Pink Lake)", desc: "Stunning pink lake, extraordinarily vibrant in color. Best seen from scenic flights or the shore." },
+            { name: "Kalbarri National Park", desc: "Stand in Nature's Window over the Murchison River and walk the high-altitude Skywalk." }
+        ]},
+        { category: "🐬 Marine Life & Eco Encounters", color: "border-emerald-100 bg-emerald-50/20", icon: "fa-shrimp text-emerald-500", list: [
+            { name: "Wild Dolphin Feeding", desc: "Watch wild bottlenose dolphins visit the shores of Monkey Mia for morning feeds, just inches away." },
+            { name: "Marine Wildlife Cruise", desc: "Cruise through Shark Bay to spot rare dugongs (sea cows) and watch sharks feed up close." },
+            { name: "Shell Beach & Stromatolites", desc: "A pure white beach composed entirely of tiny shells; inspect earth's oldest living fossils at Hamelin Pool." }
+        ]}
+    ];
+
     container.innerHTML = `
-        <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-600 rounded-full mb-4 text-2xl">
+        <div class="bg-white rounded-2xl shadow-md border border-stone-200/80 p-6 md:p-8 space-y-8">
+            
+            <!-- 1. Header Hero -->
+            <div class="text-center pb-6 border-b border-stone-100">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl mb-4 text-3xl shadow-sm">
                     <i class="fa-solid fa-map-location-dot"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-stone-800">${t.overviewTitleDetail}</h2>
-                <p class="text-stone-500 mt-2">${t.overviewSubDetail}</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-stone-800 tracking-tight">${t.overviewTitleDetail}</h2>
+                <p class="text-stone-500 mt-2 font-medium">${t.overviewSubDetail}</p>
                 <div class="mt-4 flex flex-wrap justify-center gap-2">
-                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded border border-green-200"><i class="fa-solid fa-check"></i> ${t.hotelConfirmed}</span>
-                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded border border-blue-200"><i class="fa-solid fa-file-lines"></i> ${t.tipsIntegrated}</span>
+                    <span class="px-2.5 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-full border border-green-200"><i class="fa-solid fa-hotel"></i> ${t.hotelConfirmed}</span>
+                    <span class="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200"><i class="fa-solid fa-road"></i> ${t.tipsIntegrated}</span>
+                    <span class="px-2.5 py-1 bg-orange-50 text-orange-700 text-xs font-semibold rounded-full border border-orange-200"><i class="fa-solid fa-child-reaching"></i> ${isZh ? '亲子自驾推荐' : 'Family Roadtrip'}</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Left: Highlights -->
-                <div class="space-y-6">
-                    <h3 class="font-bold text-lg text-stone-700 border-b border-stone-100 pb-2">${t.highlightsTitle}</h3>
+            <!-- 2. Travel Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200/60 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-lg shrink-0"><i class="fa-regular fa-calendar-days"></i></div>
+                    <div>
+                        <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">${isZh ? '行程天数' : 'Duration'}</p>
+                        <p class="text-sm font-extrabold text-stone-700">13 ${isZh ? '天' : 'Days'}</p>
+                    </div>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200/60 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-route"></i></div>
+                    <div>
+                        <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">${isZh ? '自驾路程' : 'Driving Distance'}</p>
+                        <p class="text-sm font-extrabold text-stone-700">~2000 ${isZh ? '公里' : 'km'}</p>
+                    </div>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200/60 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">${isZh ? '出游成员' : 'Travelers'}</p>
+                        <p class="text-sm font-extrabold text-stone-700">2 ${isZh ? '大' : 'Ad'} 2 ${isZh ? '小' : 'Ch'}</p>
+                    </div>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200/60 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-car-side"></i></div>
+                    <div>
+                        <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">${isZh ? '租车建议' : 'Vehicle Class'}</p>
+                        <p class="text-sm font-extrabold text-stone-700">${isZh ? '大型 SUV / MPV' : 'Large SUV'}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Key Summaries: Accommodation Timeline & Key Attractions -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+                
+                <!-- Left: Accommodation Timeline (5 cols) -->
+                <div class="xl:col-span-5 space-y-4">
+                    <h3 class="font-extrabold text-lg text-stone-700 border-b border-stone-100 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-hotel text-indigo-500"></i> ${isZh ? '🏨 酒店与住宿节点' : '🏨 Overnight Stays'}
+                    </h3>
+                    
+                    <div class="relative pl-6 border-l border-stone-200 space-y-5 py-2 ml-3">
+                        ${stays.map((stay, idx) => `
+                            <div class="relative group">
+                                <!-- Dot indicator -->
+                                <span class="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full border-2 border-white group-hover:scale-125 transition-transform ${idx === 0 || idx === stays.length - 1 ? 'bg-indigo-500' : 'bg-stone-300'}"></span>
+                                <div class="bg-stone-50/60 hover:bg-stone-50 p-3 rounded-lg border border-stone-200/50 transition-colors">
+                                    <div class="flex justify-between items-start gap-2">
+                                        <h4 class="font-extrabold text-xs text-stone-700 leading-tight">${stay.hotel}</h4>
+                                        <span class="text-[10px] font-bold shrink-0 px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100">${stay.duration}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-stone-400">
+                                        <i class="fa-solid fa-location-dot text-stone-300"></i>
+                                        <span>${stay.location}</span>
+                                        <span class="mx-1">•</span>
+                                        <i class="fa-regular fa-calendar text-stone-300"></i>
+                                        <span>${stay.dates}</span>
+                                    </div>
+                                    <p class="text-[10px] text-stone-500 mt-1 italic">${stay.note}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Right: Key Attractions Summary (7 cols) -->
+                <div class="xl:col-span-7 space-y-4">
+                    <h3 class="font-extrabold text-lg text-stone-700 border-b border-stone-100 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-signs-post text-orange-500"></i> ${isZh ? '🌟 核心景点与亲子打卡' : '🌟 Key Attractions'}
+                    </h3>
+                    
                     <div class="space-y-4">
-                        <div class="flex gap-3">
-                            <div class="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-water"></i></div>
-                            <div><h4 class="font-bold text-sm">${t.highlight1Title}</h4><p class="text-xs text-stone-500">${t.highlight1Desc}</p></div>
-                        </div>
-                        <div class="flex gap-3">
-                            <div class="w-8 h-8 rounded bg-orange-50 text-orange-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-utensils"></i></div>
-                            <div><h4 class="font-bold text-sm">${t.highlight2Title}</h4><p class="text-xs text-stone-500">${t.highlight2Desc}</p></div>
-                        </div>
-                        <div class="flex gap-3">
-                            <div class="w-8 h-8 rounded bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-bed"></i></div>
-                            <div><h4 class="font-bold text-sm">${t.highlight3Title}</h4><p class="text-xs text-stone-500">${t.highlight3Desc}</p></div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-100 mt-4">
-                        <h4 class="font-bold text-sm mb-3 text-stone-600">${t.carAdviceTitle}</h4>
-                        <div class="flex items-center gap-3">
-                            <i class="fa-solid fa-car-side text-2xl text-stone-400"></i>
-                            <p class="text-xs text-stone-500">${t.carAdviceDesc}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Overnight Stops -->
-                <div class="bg-indigo-50 rounded-xl p-6 relative overflow-hidden">
-                    <h3 class="font-bold text-indigo-900 mb-6 flex items-center gap-2"><i class="fa-solid fa-route"></i> ${t.stopsTitle}</h3>
-                    
-                    <div class="relative z-10 space-y-0 ml-2 border-l-2 border-indigo-200 pl-6 py-2">
-                        <div class="relative mb-6">
-                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white"></span>
-                            <h4 class="font-bold text-indigo-800">Perth (Novotel Murray St)</h4>
-                            <p class="text-xs text-indigo-600">${t.dayAbbr} 1-2 (${currentLang === 'zh' ? '6月11-12' : 'Jun 11-12'})</p>
-                        </div>
-                        <div class="relative mb-6">
-                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-indigo-300 rounded-full"></span>
-                            <h4 class="font-bold text-indigo-800">Jurien Bay (Tourist Park)</h4>
-                            <p class="text-xs text-indigo-600">${t.dayAbbr} 3 (${currentLang === 'zh' ? '6月13' : 'Jun 13'})</p>
-                        </div>
-                        <div class="relative mb-6">
-                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-indigo-300 rounded-full"></span>
-                            <h4 class="font-bold text-indigo-800">Kalbarri (Murchison View)</h4>
-                            <p class="text-xs text-indigo-600">${t.dayAbbr} 4-5 (${currentLang === 'zh' ? '6月14-15' : 'Jun 14-15'})</p>
-                        </div>
-                        <div class="relative mb-6">
-                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white"></span>
-                            <h4 class="font-bold text-indigo-800">Monkey Mia (RAC Resort)</h4>
-                            <p class="text-xs text-indigo-600">${t.dayAbbr} 6-7 (${currentLang === 'zh' ? '6月16-17' : 'Jun 16-17'})</p>
-                        </div>
-                        <div class="relative mb-6">
-                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-indigo-300 rounded-full"></span>
-                            <h4 class="font-bold text-indigo-800">Geraldton (African Reef)</h4>
-                            <p class="text-xs text-indigo-600">${t.dayAbbr} 8 (${currentLang === 'zh' ? '6月18' : 'Jun 18'})</p>
-                        </div>
-                        <div class="relative">
-                            <span class="absolute -left-[31px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white"></span>
-                            <h4 class="font-bold text-indigo-800">Perth (Holiday Inn IHG)</h4>
-                            <p class="text-xs text-indigo-600">${t.dayAbbr} 9-11 (${currentLang === 'zh' ? '6月19-21' : 'Jun 19-21'})</p>
-                        </div>
+                        ${attractions.map(cat => `
+                            <div class="border rounded-xl p-4 ${cat.color}">
+                                <h4 class="font-extrabold text-xs text-stone-700 flex items-center gap-2 mb-3">
+                                    <i class="fa-solid ${cat.icon}"></i> ${cat.category}
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    ${cat.list.map(attr => `
+                                        <div class="bg-white/90 p-2.5 rounded-lg border border-stone-200/40 shadow-sm flex flex-col justify-between">
+                                            <span class="text-[11px] font-extrabold text-stone-700 mb-1 leading-tight flex items-center gap-1">
+                                                <i class="fa-solid fa-circle-check text-orange-400 text-[8px]"></i> ${attr.name}
+                                            </span>
+                                            <p class="text-[10px] text-stone-500 leading-normal">${attr.desc}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             </div>
+
+            <!-- 4. Driving Tips & Warning Banner -->
+            <div class="bg-stone-50 border border-stone-200/80 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row items-start gap-4 shadow-inner">
+                <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="space-y-2">
+                    <h4 class="font-extrabold text-sm text-stone-700">${isZh ? '自驾车型建议与安全贴士' : 'Road Trip & Safety Advice'}</h4>
+                    <p class="text-xs text-stone-500 leading-relaxed">
+                        ${isZh ? '建议租用 <b>大型 SUV (如丰田 Kluger)</b> 或 <b>豪华 MPV (如起亚 Carnival)</b>。西澳自驾路途遥远，充沛的动力和宽敞的后备箱是收纳4人行李及亲子舒适度保障的必备条件。' : 'We strongly recommend hiring a <b>Large SUV (e.g., Toyota Kluger)</b> or <b>MPV (e.g., Kia Carnival)</b>. Vast driving distances in WA require robust power, comfort, and ample luggage space for a family of 4.'}
+                    </p>
+                    <p class="text-xs text-orange-600 font-bold leading-normal">
+                        <i class="fa-solid fa-circle-info"></i> ${isZh ? '【安全警告】自驾路线中（特别是在西北公路上）黄昏或黎明时段野生袋鼠极度活跃，请尽量避免在夜间及视线不佳时行车，以防碰撞事故。' : '【Safety Warning】Wild kangaroos are extremely active during dusk and dawn on regional roads. Avoid driving at night or under low visibility to prevent wildlife collisions.'}
+                    </p>
+                </div>
+            </div>
+
+            <!-- 5. Highlights Section -->
+            <div class="space-y-4">
+                <h3 class="font-extrabold text-lg text-stone-700 border-b border-stone-100 pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-sparkles text-yellow-500"></i> ${t.highlightsTitle}
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50/30 border border-blue-100 rounded-xl p-4 space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-water"></i></div>
+                        <h4 class="font-extrabold text-xs text-stone-700">${t.highlight1Title}</h4>
+                        <p class="text-[11px] text-stone-500 leading-relaxed">${t.highlight1Desc}</p>
+                    </div>
+                    <div class="bg-orange-50/30 border border-orange-100 rounded-xl p-4 space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center text-sm"><i class="fa-solid fa-utensils"></i></div>
+                        <h4 class="font-extrabold text-xs text-stone-700">${t.highlight2Title}</h4>
+                        <p class="text-[11px] text-stone-500 leading-relaxed">${t.highlight2Desc}</p>
+                    </div>
+                    <div class="bg-purple-50/30 border border-purple-100 rounded-xl p-4 space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-sm"><i class="fa-solid fa-bed"></i></div>
+                        <h4 class="font-extrabold text-xs text-stone-700">${t.highlight3Title}</h4>
+                        <p class="text-[11px] text-stone-500 leading-relaxed">${t.highlight3Desc}</p>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     `;
 }
